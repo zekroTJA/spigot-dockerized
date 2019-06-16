@@ -1,6 +1,7 @@
 DOCKER = docker
 
 TAG       = mc-dockerized
+MCVERSION = 1.13.2
 HOST_LOC  = $(PWD)/testing
 
 ##########################################################################
@@ -9,7 +10,7 @@ HOST_LOC  = $(PWD)/testing
 
 build: _checkadmin
 	docker build . -t $(TAG) \
-		--build-arg MCVERSION="1.13.2"
+		--build-arg MCVERSION=$(MCVERSION)
 
 prune: _checkadmin
 	docker system prune
