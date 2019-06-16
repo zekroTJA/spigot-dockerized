@@ -1,0 +1,4 @@
+#### JVM START SETTINGS ###
+
+MAX_RAM="2G"
+MIN_RAM="1G"
