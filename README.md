@@ -1,5 +1,7 @@
 # Minecraft Spigot Dockerized  🐳 💎
 
+![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/zekro/spigot-dockerized.svg?color=cyan&logo=docker&logoColor=cyan&style=for-the-badge)
+
 ## Self-Build Image
 
 You can build your spigot Docker image for whatever Minecraft version supported by the official [spigot build tools](https://www.spigotmc.org/wiki/buildtools/#versions).
