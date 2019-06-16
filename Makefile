@@ -6,7 +6,7 @@ HOST_LOC  = $(PWD)/testing
 
 ##########################################################################
 
-.PHONY: _checkadmin build prune run rund
+.PHONY: _checkadmin build prune run rund push publish
 
 build: _checkadmin
 	docker build . -t $(TAG) \
@@ -33,6 +33,11 @@ run: _checkadmin
 		-v $(HOST_LOC)/worlds:/etc/mcserver/worlds \
 		-v $(HOST_LOC)/locals:/etc/mcserver/locals \
 		$(TAG)
+
+push: _checkadmin
+	docker push $(TAG)
+
+publish: build push
 
 _checkadmin:
 	@if [ `whoami` != 'root' ]; then \
