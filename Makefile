@@ -1,24 +1,37 @@
 DOCKER = docker
 
-TAG    = mc-dockerized
+TAG       = mc-dockerized
+HOST_LOC  = $(PWD)/testing
 
 ##########################################################################
 
-.PHONY: _checkadmin build prune
+.PHONY: _checkadmin build prune run rund
 
 build: _checkadmin
-	docker build . -t $(TAG)
+	docker build . -t $(TAG) \
+		--build-arg MCVERSION="1.13.2"
 
 prune: _checkadmin
 	docker system prune
 
+rund: _checkadmin
+	docker run \
+		-p 45565:25565 -p 45575:25575 \
+		-v $(HOST_LOC)/config:/etc/mcserver/config \
+		-v $(HOST_LOC)/plugins:/etc/mcserver/plugins \
+		-v $(HOST_LOC)/worlds:/etc/mcserver/worlds \
+		-v $(HOST_LOC)/locals:/etc/mcserver/locals \
+		-d \
+		$(TAG)
+
 run: _checkadmin
 	docker run \
 		-p 45565:25565 -p 45575:25575 \
-		-v $(PWD)/testing/config:/etc/mcserver/config \
-		-v $(PWD)/testing/plugins:/etc/mcserver/plugins \
-		-v $(PWD)/testing/worlds:/etc/mcserver/worlds \
-		mc-dockerized
+		-v $(HOST_LOC)/config:/etc/mcserver/config \
+		-v $(HOST_LOC)/plugins:/etc/mcserver/plugins \
+		-v $(HOST_LOC)/worlds:/etc/mcserver/worlds \
+		-v $(HOST_LOC)/locals:/etc/mcserver/locals \
+		$(TAG)
 
 _checkadmin:
 	@if [ `whoami` != 'root' ]; then \

@@ -1,10 +1,12 @@
 FROM openjdk:11.0.3-jdk-stretch
 
 LABEL maintainer="contact@zekro.de"
+LABEL version="1.1.0"
+LABEL description="Minecraft spigot dockerized with selectable version on build and customizable start parameters."
 
 ### VARIABLES ###################################
 
-ARG MCVERSION="1.13.2"
+ARG MCVERSION="LATEST"
 
 #################################################
 
@@ -14,25 +16,31 @@ RUN apt install -y \
 RUN mkdir -p /var/mcserver &&\
     mkdir -p /etc/mcserver/worlds &&\
     mkdir -p /etc/mcserver/plugins &&\
-    mkdir -p /etc/mcserver/config
+    mkdir -p /etc/mcserver/config &&\
+    mkdir -p /etc/mcserver/locals
 
 WORKDIR /var/mcserver
 
-ADD https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar .
+# ADD https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar .
+ADD https://cdn.getbukkit.org/spigot/spigot-${MCVERSION}.jar .
+
 ADD ./scripts ./scripts
+ADD ./config  ./config
 
-RUN java -jar BuildTools.jar --rev $MCVERSION
-
-RUN printf "\neula=true" | tee eula.txt
+# RUN java -jar BuildTools.jar --rev $MCVERSION
 
 EXPOSE 25565
 EXPOSE 25575
 
+WORKDIR /etc/mcserver/locals
+
 ENV MCV ${MCVERSION}
 
-CMD bash ./scripts/runner.sh \
+CMD bash /var/mcserver/scripts/runner.sh \
         /etc/mcserver/config/jvmsettings.sh \
-        spigot-${MCV}.jar \
+        /var/mcserver/config/jvmsettings.sh \
+        /var/mcserver/spigot-${MCV}.jar \
         /etc/mcserver/config \
         /etc/mcserver/plugins \
-        /etc/mcserver/worlds
+        /etc/mcserver/worlds \
+        /etc/mcserver/locals/eula.txt
