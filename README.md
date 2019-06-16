@@ -1,6 +1,7 @@
 # Minecraft Spigot Dockerized  🐳 💎
 
-![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/zekro/spigot-dockerized.svg?color=cyan&logo=docker&logoColor=cyan&style=for-the-badge)
+<a href="https://hub.docker.com/r/zekro/spigot-dockerized"><img alt="Docker Cloud Automated build" height="30" src="https://img.shields.io/docker/cloud/automated/zekro/spigot-dockerized.svg?color=cyan&logo=docker&logoColor=cyan&style=for-the-badge"></a>&nbsp;
+<img height="30" src="https://forthebadge.com/images/badges/built-with-grammas-recipe.svg" />
 
 ## Self-Build Image
 
