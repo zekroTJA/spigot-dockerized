@@ -6,12 +6,14 @@ LABEL description="Minecraft spigot dockerized with selectable version on build 
 
 ### VARIABLES ###################################
 
-ARG MCVERSION="LATEST"
+ARG MCVERSION="latest"
 
 #################################################
 
-RUN apt install -y \
-    git
+RUN apt update -y &&\
+    apt install -y \
+    git \
+    dos2unix
 
 RUN mkdir -p /var/mcserver &&\
     mkdir -p /etc/mcserver/worlds &&\
@@ -21,13 +23,17 @@ RUN mkdir -p /var/mcserver &&\
 
 WORKDIR /var/mcserver
 
-# ADD https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar .
-ADD https://cdn.getbukkit.org/spigot/spigot-${MCVERSION}.jar .
+ADD https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar .
+
+# This is just for debugging purposes
+# ADD https://cdn.getbukkit.org/spigot/spigot-${MCVERSION}.jar .
 
 ADD ./scripts ./scripts
 ADD ./config  ./config
 
-# RUN java -jar BuildTools.jar --rev $MCVERSION
+RUN java -jar BuildTools.jar --rev $MCVERSION
+
+RUN dos2unix /var/mcserver/*/*.sh
 
 EXPOSE 25565
 EXPOSE 25575
